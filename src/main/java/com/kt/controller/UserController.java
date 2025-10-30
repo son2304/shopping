@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kt.dto.UserCreateRequest;
 import com.kt.service.UserService;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +22,10 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	private final UserService userService;
 
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "400", description = "유효성 검사 실패"),
+		@ApiResponse(responseCode = "500", description = "서버 에러 - 백엔드에 바로 문의 바랍니다.")
+	})
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public void create(@Valid @RequestBody UserCreateRequest request) {
