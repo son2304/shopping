@@ -12,12 +12,33 @@ import lombok.RequiredArgsConstructor;
 public class UserRepository {
 	private final JdbcTemplate jdbcTemplate;
 	public void save(User user) {
-		String sql = """
-  			INSERT INTO MEMBER (loginId, password, name, birthday)
-  			VALUES (?, ?, ?, ?);
-		""";
-		jdbcTemplate.update(sql,
-			user.getLoginId(), user.getPassword(), user.getName(), user.getBirthday());
+		var sql = """
+			INSERT INTO MEMBER (
+													id,
+													loginId,
+													password,
+													name,
+													birthday,
+													mobile,
+													email,
+													gender,
+													createdAt,
+													updatedAt
+													) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			""";
+		jdbcTemplate.update(
+			sql,
+			user.getId(),
+			user.getLoginId(),
+			user.getPassword(),
+			user.getName(),
+			user.getBirthday(),
+			user.getMobile(),
+			user.getEmail(),
+			user.getGender() != null ? user.getGender().name() : null,
+			user.getCreatedAt(),
+			user.getUpdatedAt()
+		);
 	}
 
 	public Long selectMaxId() {
