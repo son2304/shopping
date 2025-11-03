@@ -61,6 +61,12 @@ public class UserRepository {
 		jdbcTemplate.update(sql, password, id);
 	}
 
+	public boolean existsById(int id) {
+		var sql = "SELECT EXISTS (SELECT id FROM MEMBER WHERE id = ?)";
+
+		return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, id));
+	}
+
 }
 
 
