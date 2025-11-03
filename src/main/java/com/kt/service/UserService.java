@@ -8,6 +8,7 @@ import com.kt.domain.User;
 import com.kt.dto.UserCreateRequest;
 import com.kt.repository.UserRepository;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -30,5 +31,9 @@ public class UserService {
 		);
 
 		userRepository.save(newUser);
+	}
+
+	public boolean isDuplicateLoginId(String loginId) {
+		return userRepository.existsByLoginId(loginId);
 	}
 }
