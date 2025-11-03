@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import javax.swing.text.html.Option;
 
+import org.springframework.data.util.Pair;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -91,7 +92,7 @@ public class UserRepository {
 		return list.stream().findFirst();
 	}
 
-	public CustomPage selectAll(int page, int size) {
+	public Pair<List<User>, Long> selectAll(int page, int size) {
 		// paging의 구조
 		// 백엔드 입장에서 필요한 것
 		// 한 화면에 몇 개를 보여줄건가 => limit
@@ -105,15 +106,8 @@ public class UserRepository {
 
 		var countSql = "SELECT COUNT(*) FROM MEMBER";
 		var totalElements = jdbcTemplate.queryForObject(countSql, Long.class);
-		var pages = (int) Math.ceil((double) totalElements / size);
 
-		return new CustomPage(
-			users,
-			size,
-			page,
-			pages,
-			totalElements
-		);
+		return Pair.of(users,totalElements);
 	}
 
 	private RowMapper<User> rowMapper(){
