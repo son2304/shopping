@@ -42,7 +42,7 @@ public class UserController {
 	// @RequestParam의 속성은 기본이 required=true
 	@GetMapping("/users/duplicate-login-id")
 	@ResponseStatus(HttpStatus.OK)
-	public Boolean isDuplicateLoginId(@RequestParam(required = false) String loginId) {
+	public Boolean isDuplicateLoginId(@RequestParam String loginId) {
 		return userService.isDuplicateLoginId(loginId);
 	}
 }
