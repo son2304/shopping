@@ -2,12 +2,13 @@ package com.kt.dto;
 
 import java.time.LocalDate;
 
-import com.kt.domain.Gender;
+import com.kt.domain.user.Gender;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+// DTO(Data Transfer Object) : 계층(레이어) 간 데이터 교환을 위한 객체
 public record UserCreateRequest(
 	@NotBlank
 	String loginId,
