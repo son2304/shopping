@@ -17,10 +17,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @Table(name = "orders")
+@NoArgsConstructor
 public class Order extends BaseEntity {
 	@Embedded
 	private Receiver receiver;
@@ -44,9 +46,27 @@ public class Order extends BaseEntity {
 	@OneToMany(mappedBy = "order")
 	private List<OrderProduct> orderProducts = new ArrayList<>();
 
+	private Order(Receiver receiver, User user) {
+		this.receiver = receiver;
+		this.user = user;
+		this.deliveredAt = LocalDateTime.now().plusDays(3);
+		this.orderStatus = OrderStatus.PENDING;
+	}
+
+	public static Order create(Receiver receiver, User user) {
+		return new Order(
+			receiver,
+			user
+		);
+	}
+
+	public void mapToOrderProduct(OrderProduct orderProduct) {
+		this.orderProducts.add(orderProduct);
+	}
+
 	// 주문 생성
 	// 주문 상태 변경
 	// 주문 생성 완료 - 재고 차감
 	// 배송받는 사람 정보 변경
-	//
+	// 주문 취소
 }

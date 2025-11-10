@@ -9,9 +9,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class OrderProduct extends BaseEntity {
 	private Long quantity;
 
@@ -21,6 +23,12 @@ public class OrderProduct extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
+
+	public OrderProduct(Order order, Product product, Long quantity) {
+		this.order = order;
+		this.product = product;
+		this.quantity = quantity;
+	}
 
 	// 주문 생성되면 OrderProduct도 같이 생성
 }

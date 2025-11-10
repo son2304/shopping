@@ -2,8 +2,12 @@ package com.kt.domain.order;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Embeddable
+@AllArgsConstructor
+@NoArgsConstructor
 public class Receiver {
 	// receiver_name
 	@Column(name = "receiver_name")
