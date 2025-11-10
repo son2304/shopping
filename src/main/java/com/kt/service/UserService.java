@@ -58,7 +58,7 @@ public class UserService {
 		// 긍정적인 상황만 생각하자 -> 패스워드가 이전것과 달라야 => 긍정적 시나리오
 		// 패스워드가 같으면 안되는데 -> 긍적적이지 않은 시나리오
 		// 검증에 안걸리길 원하는 상황을 적어주면됨 :
-		Preconditions.validate(!user.getPassword().equals(oldPassword), ErrorCode.DOES_NOT_MATCH_OLD_PASSWORD);
+		Preconditions.validate(user.getPassword().equals(oldPassword), ErrorCode.DOES_NOT_MATCH_OLD_PASSWORD);
 		Preconditions.validate(!oldPassword.equals(password), ErrorCode.CAN_NOT_ALLOWED_SAME_PASSWORD);
 
 		user.changePassword(password);
