@@ -1,6 +1,7 @@
 package com.kt.controller.user;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,26 +13,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kt.dto.UserCreateRequest;
-import com.kt.dto.UserUpdatePasswordRequest;
+import com.kt.common.ApiResult;
+import com.kt.common.SwaggerAssistance;
+import com.kt.dto.user.UserRequest;
+import com.kt.dto.user.UserUpdatePasswordRequest;
 import com.kt.service.UserService;
-
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "유저", description = "유저 관련 API")
+@Tag(name = "User", description = "유저 관련 API")
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-@ApiResponses(value = {
-	@ApiResponse(responseCode = "400", description = "유효성 검사 실패"),
-	@ApiResponse(responseCode = "500", description = "서버 에러 - 백엔드에 바로 문의 바랍니다.")
-})
-public class UserController {
+public class UserController extends SwaggerAssistance {
 	private final UserService userService;
 
 	// API 문서화는 크게 2가지의 방식이 존재
@@ -43,13 +39,13 @@ public class UserController {
 	// 장점 : 프로덕션 코드에 침범이 없다, 신뢰할 수 있음
 	// 단점 : UI가 안이쁘다. 그리고 문서작성하는데 테스트코드 기반이라 시간이 걸림.
 
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	// loginId, password, name, birthday
 	// json형태의 body에 담겨서 post요청으로 /users로 들어오면
 	// @RequestBody를보고 jacksonObjectMapper가 동작해서 json을 읽어서 dto로 변환
-	public void create(@Valid @RequestBody UserCreateRequest request) {
+	public ApiResult<Void> create(@Valid @RequestBody UserRequest.Create request) {
 		userService.create(request);
+		return ApiResult.ok();
 	}
 
 	// /users/duplicate-login-id?loginId=s1234
@@ -58,8 +54,9 @@ public class UserController {
 	// @RequestParam의 속성은 기본이 required=true
 	@GetMapping("/users/duplicate-login-id")
 	@ResponseStatus(HttpStatus.OK)
-	public Boolean isDuplicateLoginId(@RequestParam String loginId) {
-		return userService.isDuplicateLoginId(loginId);
+	public ApiResult<Boolean> isDuplicateLoginId(@RequestParam String loginId) {
+		var result = userService.isDuplicateLoginId(loginId);
+		return ApiResult.ok(result);
 	}
 
 	// uri는 식별이 가능해야한다.
@@ -72,13 +69,15 @@ public class UserController {
 	// 3. 인증/인가 객체에서 id값을 꺼낸다. (V)
 	@PutMapping("/{id}/update-password")
 	@ResponseStatus(HttpStatus.OK)
-	public void updatePassword(@PathVariable Long id, @RequestBody @Valid UserUpdatePasswordRequest request) {
+	public ApiResult<Void> updatePassword(@PathVariable Long id, @RequestBody @Valid UserUpdatePasswordRequest request) {
 		userService.changePassword(id, request.oldPassword(), request.newPassword());
+		return ApiResult.ok();
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public void delete(@PathVariable Long id) {
+	public ApiResult<Void> delete(@PathVariable Long id) {
 		userService.delete(id);
+		return ApiResult.ok();
 	}
 }
