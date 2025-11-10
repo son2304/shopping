@@ -19,6 +19,8 @@ import com.kt.dto.user.UserResponse;
 import com.kt.dto.user.UserUpdateRequest;
 import com.kt.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,13 @@ public class AdminUserController extends SwaggerAssistance {
 	// 유저 리스트 조회
 
 	// ?key=value&page=1&keyword=asdasd
+	@Operation(
+		parameters = {
+			@Parameter(name = "keyword", description = "검색 키워드(이름)"),
+			@Parameter(name = "page", description = "페이지 번호", example = "1"),
+			@Parameter(name = "size", description = "페이지 크기", example = "10")
+		}
+	)
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public ApiResult<Page<UserResponse.Search>> search(
