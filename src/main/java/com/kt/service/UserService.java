@@ -30,7 +30,7 @@ public class UserService {
 	// PSA - Portable Service Abstraction
 	// 환경설정을 살짝 바꿔서 일관된 서비스를 제공하는 것
 	public void create(UserRequest.Create request) {
-		var newUser = new User(
+		var newUser = User.normalUser(
 			request.loginId(),
 			request.password(),
 			request.name(),
