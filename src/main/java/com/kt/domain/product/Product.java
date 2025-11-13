@@ -3,7 +3,11 @@ package com.kt.domain.product;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.util.Strings;
+
 import com.kt.common.BaseEntity;
+import com.kt.common.ErrorCode;
+import com.kt.common.Preconditions;
 import com.kt.domain.orderproduct.OrderProduct;
 
 import jakarta.persistence.Entity;
@@ -29,6 +33,9 @@ public class Product extends BaseEntity {
 	private List<OrderProduct> orderProducts = new ArrayList<>();
 
 	public Product(String name, Long price, Long stock) {
+		Preconditions.validate(Strings.isNotBlank(name), ErrorCode.INVALID_PARAMETER);
+		Preconditions.validate(price >= 0, ErrorCode.INVALID_PARAMETER);
+		Preconditions.validate(stock >= 0, ErrorCode.INVALID_PARAMETER);
 		this.name = name;
 		this.price = price;
 		this.stock = stock;
@@ -52,23 +59,23 @@ public class Product extends BaseEntity {
 		this.status = ProductStatus.ACTIVATED;
 	}
 
-	public void delete() {
+	public void delete(){
 		this.status = ProductStatus.DELETED;
 	}
 
-	public void decreaseStock(Long quantity) {
+	public void decreaseStock(Long quantity){
 		this.stock -= quantity;
 	}
 
-	public void increaseStock(Long quantity) {
+	public void increaseStock(Long quantity){
 		this.stock += quantity;
 	}
 
-	public boolean canProvide(Long quantity) {
+	public boolean canProvide(Long quantity){
 		return this.stock >= quantity;
 	}
 
-	public void mapToOrderProduct(OrderProduct orderProduct) {
+	public void mapToOrderProduct(OrderProduct orderProduct){
 		this.orderProducts.add(orderProduct);
 	}
 

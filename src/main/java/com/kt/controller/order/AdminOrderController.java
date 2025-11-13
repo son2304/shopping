@@ -8,20 +8,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kt.common.ApiResult;
 import com.kt.common.Paging;
-import com.kt.domain.order.Order;
 import com.kt.dto.order.OrderResponse;
-import com.kt.repository.order.OrderRepository;
+import com.kt.repository.order.OrderRepositoryCustom;
 
 import io.swagger.v3.oas.annotations.Parameter;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/admin/orders")
+@RequiredArgsConstructor
 public class AdminOrderController {
-	private final OrderRepository orderRepository;
-
-	public AdminOrderController(OrderRepository orderRepository) {
-		this.orderRepository = orderRepository;
-	}
+	private final OrderRepositoryCustom orderRepository;
 
 	// 서비스에서 하는게 없음
 	// 1. 리포지토리 주입 바로 받아서 할거냐 -> 싱크홀 안티패턴 (v)

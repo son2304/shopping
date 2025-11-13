@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.kt.domain.order.Order;
 
-public interface OrderRepository extends JpaRepository<Order, Long>, OrderRepositoryCustom {
+public interface OrderRepository extends JpaRepository<Order, Long> {
 	// 1. 네이티브 쿼리
 	// 2. JPQL로 작성
 	// 3. 쿼리 메소드로 작성
